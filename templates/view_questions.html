@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Question</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Question:</h1>
+    <p>{{ question.text }}</p>
+
+    <h2>Answers:</h2>
+    {% if answers %}
+        <ul>
+            {% for answer in answers %}
+                <li>{{ answer.text }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No answers yet.</p>
+    {% endif %}
+
+    <h2>Submit Your Answer:</h2>
+    <form id="answerForm" method="POST" action="{{ url_for('answer', question_id=question.id) }}">
+        <label for="answer">Your Answer:</label>
+        <textarea id="answer" name="answer" rows="4" cols="50" required></textarea>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // JavaScript code for speech recognition (optional)
+        function startRecognition() {
+            try {
+                var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!SpeechRecognition) {
+                    alert("Speech Recognition API is not supported in this browser.");
+                    return;
+                }
+
+                var recognition = new SpeechRecognition();
+                recognition.lang = 'en-US';
+                recognition.interimResults = false;
+
+                recognition.onstart = function() {
+                    console.log("Voice recognition started. Speak into the microphone.");
+                };
+
+                recognition.onresult = function(event) {
+                    var speechResult = event.results[0][0].transcript;
+                    $('#answer').val(speechResult);
+                };
+
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error:', event);
+                    alert('Error occurred in recognition: ' + event.error);
+                };
+
+                recognition.onend = function() {
+                    console.log("Voice recognition ended.");
+                };
+
+                recognition.start();
+            } catch (error) {
+                console.error('Speech recognition error:', error);
+                alert('Speech recognition error: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

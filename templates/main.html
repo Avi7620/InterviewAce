@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Template</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Question form -->
+    <form id="questionForm">
+        <label for="question">Enter your question:</label>
+        <input type="text" id="question" name="question" required>
+        <button type="button" onclick="generate()">Generate</button>
+        <button type="button" onclick="startRecognition()">Speak</button>
+    </form>
+
+    <!-- Loading indicator -->
+    <div id="loading" style="display: none;">
+        <p>Loading...</p>
+    </div>
+
+    <!-- Response container -->
+    <div id="responseContainer" style="display: none;">
+        <h1>Generated Questions:</h1>
+        <ul id="response"></ul>
+    </div>
+
+    <!-- jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Prevent form submission on Enter key press
+            $('#questionForm').on('submit', function (event) {
+                event.preventDefault();
+                generate();
+            });
+        });
+
+        // Function to generate response
+// Function to generate response
+function generate() {
+    var question = $('#question').val();
+    $('#loading').show();
+    $('#responseContainer').hide();
+    $.ajax({
+        type: 'POST',
+        url: '/generate',
+        data: { 'question': question },
+        success: function () {
+            $('#loading').hide();
+            // Redirect to the questions page upon successful question generation
+            window.location.href = "/questions";
+        },
+        error: function (error) {
+            $('#loading').hide();
+            $('#response').text('An error occurred while generating the response.');
+            $('#responseContainer').show();
+        }
+    });
+}
+
+
+        // Function to start voice recognition
+        function startRecognition() {
+            try {
+                var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!SpeechRecognition) {
+                    alert("Speech Recognition API is not supported in this browser.");
+                    return;
+                }
+
+                var recognition = new SpeechRecognition();
+                recognition.lang = 'en-US';
+                recognition.interimResults = false;
+
+                recognition.onstart = function() {
+                    console.log("Voice recognition started. Speak into the microphone.");
+                };
+
+                recognition.onresult = function(event) {
+                    var speechResult = event.results[0][0].transcript;
+                    $('#question').val(speechResult);
+                };
+
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error:', event);
+                    alert('Error occurred in recognition: ' + event.error);
+                };
+
+                recognition.onend = function() {
+                    console.log("Voice recognition ended.");
+                };
+
+                recognition.start();
+            } catch (error) {
+                console.error('Speech recognition error:', error);
+                alert('Speech recognition error: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

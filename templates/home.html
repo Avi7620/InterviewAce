@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview-Prep</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 10px 20px;
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        /* Project Name */
+        .navbar .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #f4f4f9;
+            text-decoration: none;
+        }
+
+        /* Navigation Links */
+        .navbar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .navbar ul li {
+            margin-left: 20px;
+        }
+
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1em;
+            padding: 8px 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar ul li a:hover {
+            background-color: #555;
+            border-radius: 4px;
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 60px 20px; /* Reduced padding */
+            margin-top: 60px;
+        }
+
+        #about {
+            background-color: #fff;
+            position: relative;
+            overflow: hidden; /* Ensures image does not overflow */
+        }
+
+        #contact {
+            background-color: #e4e4e4;
+        }
+
+        /* Image Styles */
+        .about-image {
+            width: 100%;
+            max-height: 300px; /* Set maximum height */
+            height: auto; /* Maintain aspect ratio */
+            object-fit: cover; /* Ensure the image covers the area without distortion */
+        }
+
+        /* Scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .navbar ul li {
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="#" class="logo">Interview-Prep</a>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="/login">Login/Signin</a></li>
+            <li><a href="/signup">Sign Up</a></li>
+        </ul>
+    </div>
+
+    <!-- About Section with Image -->
+    <section id="about" class="content-section">
+        <img src="static/Screenshot 2024-09-11 104441.png" alt="About Us" class="about-image">
+        <h1>About Interview-Prep</h1>
+        <p>Interview-Prep is designed to help developers and coders prepare for their upcoming interviews. Our platform offers a wide range of interview questions, coding challenges, and resources to assist you in acing your technical interviews.</p>
+        <p>Our goal is to make the preparation process seamless, enabling you to practice and learn in an efficient manner.</p>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="content-section">
+        <h1>Contact Us</h1>
+        <p>If you have any questions or need further assistance, feel free to contact us.</p>
+        <p>Email: support@interview-prep.com</p>
+        <p>Phone: +1 800 123 4567</p>
+    </section>
+
+</body>
+</html>

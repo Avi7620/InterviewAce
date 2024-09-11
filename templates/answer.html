@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answer Question</title>
+    <style>
+        /* Global styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Form container */
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        /* Title styling */
+        h1 {
+            font-size: 1.8em;
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Label styling */
+        label {
+            font-size: 1.1em;
+            color: #555;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Input field styling */
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        /* Button styling */
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-right: 10px;
+        }
+
+        button[type="submit"] {
+            background-color: #28a745;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        /* Voice button styling */
+        button[type="button"] {
+            background-color: #ffc107;
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            input[type="text"] {
+                padding: 8px;
+            }
+
+            button {
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ question.text }}</h1>
+        <form method="POST">
+            <label for="answer">Your Answer:</label>
+            <input type="text" id="answer" name="answer" required>
+            <button type="submit">Submit</button>
+            <button type="button" onclick="startRecognition()">Speak</button>
+        </form>
+    </div>
+
+    <script>
+        function startRecognition() {
+            try {
+                var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!SpeechRecognition) {
+                    alert("Speech Recognition API is not supported in this browser.");
+                    return;
+                }
+
+                var recognition = new SpeechRecognition();
+                recognition.lang = 'en-US';
+                recognition.interimResults = false;
+
+                recognition.onstart = function() {
+                    console.log("Voice recognition started. Speak into the microphone.");
+                };
+
+                recognition.onresult = function(event) {
+                    var speechResult = event.results[0][0].transcript;
+                    document.getElementById('answer').value = speechResult;
+                };
+
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error:', event);
+                    alert('Error occurred in recognition: ' + event.error);
+                };
+
+                recognition.onend = function() {
+                    console.log("Voice recognition ended.");
+                };
+
+                recognition.start();
+            } catch (error) {
+                console.error('Speech recognition error:', error);
+                alert('Speech recognition error: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
