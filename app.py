@@ -106,10 +106,6 @@ def contact():
     flash('Your message has been sent successfully!', 'success')
     return redirect(url_for('form'))
 
-
-
-
-
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -127,29 +123,34 @@ def signup():
         db.session.commit()
 
         flash('Account created successfully! Please log in.')
-        return redirect(url_for('sl'))
+        return redirect(url_for('login'))  # Ensure this redirects to the login page
 
-    return render_template('signup.html')
+    return render_template('index.html')
 
-
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    email = request.form.get('email')
-    password = request.form.get('password')
-    user = User.query.filter_by(email=email, password=password).first()
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        user = User.query.filter_by(email=email, password=password).first()
 
-    if user:
-        login_user(user)
-        return redirect(url_for('dashboard'))
-    else:
-        flash('Login failed. Check your credentials.')
-        return redirect(url_for('index'))
+        if user:
+            login_user(user)
+            return redirect(url_for('dashboard'))
+        else:
+            flash('Login failed. Check your credentials.')
+            return redirect(url_for('login'))
+    
+    return render_template('index.html')
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    session.clear()  # Clear the session
+    
+    return redirect(url_for('index'))  # Redirect to the homepage or login page
+
 
 @app.route('/main')
 @login_required
