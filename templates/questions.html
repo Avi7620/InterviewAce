@@ -17,15 +17,15 @@
             height: 100vh;
         }
 
-        /* Container for questions */
-        .container {
+        /* Container for all question sets */
+        .main-container {
             background-color: #fff;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
+            max-width: 700px;
             width: 100%;
-            max-height: 80vh; /* Limit the height of the container */
+            max-height: 80vh; /* Limit the height of the main container */
             overflow-y: auto; /* Enable vertical scrolling */
         }
 
@@ -37,16 +37,20 @@
             color: #333;
         }
 
-        /* Styling the list */
-        ul {
-            list-style-type: none;
-            padding: 0;
+        /* Container for each question set */
+        .question-set {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
+        /* Timestamp styling */
         .timestamp {
             font-size: 1.1em;
             color: #333;
-            margin: 20px 0 10px;
+            margin-bottom: 10px;
             font-weight: bold;
         }
 
@@ -55,8 +59,14 @@
             font-weight: normal;
         }
 
+        /* Styling the list */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
         li {
-            background-color: #f9f9f9;
+            background-color: #fff;
             margin-bottom: 15px;
             padding: 15px;
             border-radius: 8px;
@@ -104,22 +114,24 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="main-container">
         <h1>Questions</h1>
         {% for timestamp, questions in grouped_questions.items() %}
-            <div class="timestamp">
-                <span class="timestamp-label">Date & Time:</span> {{ timestamp }}
+            <div class="question-set">
+                <div class="timestamp">
+                    <span class="timestamp-label">Date & Time:</span> {{ timestamp }}
+                </div>
+                <ul>
+                    {% for question in questions %}
+                    <li>
+                        <a href="{{ url_for('view_question', question_id=question.id) }}">{{ question.text }}</a>
+                        <button>
+                            <a href="{{ url_for('answer', question_id=question.id) }}">Answer</a>
+                        </button>
+                    </li>
+                    {% endfor %}
+                </ul>
             </div>
-            <ul>
-                {% for question in questions %}
-                <li>
-                    <a href="{{ url_for('view_question', question_id=question.id) }}">{{ question.text }}</a>
-                    <button>
-                        <a href="{{ url_for('answer', question_id=question.id) }}">Answer</a>
-                    </button>
-                </li>
-                {% endfor %}
-            </ul>
         {% endfor %}
     </div>
 </body>
