@@ -170,7 +170,7 @@ def generate():
         questions = response.text.split('\n')
     else:
         questions = ["⚠️ No valid response generated. Try rephrasing the prompt."]
-
+    
     # Save questions in DB
     for q in questions:
         if q.strip():
