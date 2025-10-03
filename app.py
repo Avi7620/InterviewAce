@@ -43,9 +43,8 @@ safety_settings = [
 ]
 
 # Create an instance of the generative model
-model = genai.GenerativeModel(model_name="gemini-pro",
-                              generation_config=generation_config,
-                              safety_settings=safety_settings)
+model = genai.GenerativeModel("models/gemini-2.5-flash")
+
 
 # User model
 class User(UserMixin, db.Model):
@@ -163,16 +162,24 @@ def dashboard():
 def generate():
     question_text = request.form['question']
     prompt_parts = [f"Generate 5 related questions for: {question_text}"]
-    response = model.generate_content(prompt_parts)
-    questions = response.text.split('\n')
 
+    response = model.generate_content(prompt_parts)
+
+    # Check if response has valid parts
+    if response.candidates and response.candidates[0].content.parts:
+        questions = response.text.split('\n')
+    else:
+        questions = ["⚠️ No valid response generated. Try rephrasing the prompt."]
+
+    # Save questions in DB
     for q in questions:
         if q.strip():
             new_question = Question(text=q.strip(), user_id=current_user.id)
             db.session.add(new_question)
-    
+
     db.session.commit()
-    return redirect(url_for('questions'))  # Redirect to the questions page
+    return redirect(url_for('questions'))
+
 
 
 @app.route('/questions')
