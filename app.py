@@ -12,7 +12,7 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
 # Configure the generative AI API key
-genai.configure(api_key="AIzaSyADC3LpYQc4SNVQPM0OuoM_NaOC_b1iRys")
+genai.configure(api_key="AIzaSyBDEBVHTiEOT-D-exTbbEDuZD1swWQwvio")
 
 # Define the generation configuration for the model
 generation_config = {
